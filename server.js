@@ -110,9 +110,9 @@ function createRoom(roomId) {
           }
         } else if (json.type === "actionHistory") {
           if (Array.isArray(json.cursor)) {
-            ws._cursorX = +json.cursor[0] || 0;
-            ws._cursorY = +json.cursor[1] || 0;
-            ws._cursorName = String(json.cursor[2]);
+            socket._cursorX = +json.cursor[0] || 0;
+            socket._cursorY = +json.cursor[1] || 0;
+            socket._cursorName = String(json.cursor[2]);
           }
           wsServer.clients.forEach((ws) => {
             if (ws !== socket) {
@@ -135,7 +135,7 @@ function createRoom(roomId) {
           positions.push(sock._cursorX,sock._cursorY,sock._cursorName);
         }
       });
-      ws.send(JSON.stringify({
+      socket.send(JSON.stringify({
         type: "cursors",
         positions
       }));
