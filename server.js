@@ -109,6 +109,11 @@ function createRoom(roomId) {
             console.warn(`[ROOM ${roomId}] DataURL too large or invalid. Ignored.`);
           }
         } else if (json.type === "actionHistory") {
+          if (Array.isArray(json.cursor)) {
+            ws._cursorX = +json.cursor[0] || 0;
+            ws._cursorY = +json.cursor[1] || 0;
+            ws._cursorName = String(json.cursor[2]);
+          }
           wsServer.clients.forEach((ws) => {
             if (ws !== socket) {
               ws.send(JSON.stringify({
@@ -123,7 +128,21 @@ function createRoom(roomId) {
       }
     });
 
+    var cursorInterval = setInterval(() => {
+      var positions = [];
+      wsServer.clients.filter((sock) => sock._sid !== ws._sid).forEach((sock) => {
+        if (sock._cursorName) {
+          positions.push(sock._cursorX,sock._cursorY,sock._cursorName);
+        }
+      });
+      ws.send(JSON.stringify({
+        type: "cursors",
+        positions
+      }));
+    },1000/30);
+
     socket.on("close", function () {
+      clearInterval(cursorInterval);
       idCounter--;
       if (wsServer.clients.size === 0) {
         startCleanupTimeout();
