@@ -132,7 +132,7 @@ function createRoom(roomId) {
       var positions = [];
       Array.from(wsServer.clients).filter((sock) => sock._sid !== ws._sid).forEach((sock) => {
         if (sock._cursorName) {
-          positions.push(sock._cursorX,sock._cursorY,sock._cursorName);
+          positions.push([sock._cursorX,sock._cursorY,sock._cursorName]);
         }
       });
       socket.send(JSON.stringify({
