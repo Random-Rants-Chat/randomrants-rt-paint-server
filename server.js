@@ -44,7 +44,7 @@ const server = http.createServer(async function (req, res) {
   setNoCorsHeaders(res);
   
   if (urlsplit[1] == "room" && urlsplit[2] == "create") {
-    const newRoomId = createRandomCharsString(6);
+    const newRoomId =  Date.now().toString();
     createRoom(newRoomId); // create the room early
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ roomId: newRoomId }));
