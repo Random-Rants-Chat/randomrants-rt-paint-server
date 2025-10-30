@@ -130,7 +130,7 @@ function createRoom(roomId) {
 
     var cursorInterval = setInterval(() => {
       var positions = [];
-      Array.from(wsServer.clients).filter((sock) => sock._sid !== ws._sid).forEach((sock) => {
+      Array.from(wsServer.clients).filter((sock) => sock._sid !== socket._sid).forEach((sock) => {
         if (sock._cursorName) {
           positions.push([sock._cursorX,sock._cursorY,sock._cursorName]);
         }
